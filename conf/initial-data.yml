@@ -77,3 +77,9 @@ contacts:
         name:   Ludwig von Drake
         title:  Professor
         email:  ludwig.drake@disney.com
+
+    - !!models.Contact
+        id:     13
+        name:   Ludwig von Drake
+        title:  Professor
+        email:  ludwig.drake@disney.com
