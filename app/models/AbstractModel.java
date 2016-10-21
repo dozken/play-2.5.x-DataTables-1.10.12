@@ -3,11 +3,14 @@ package models;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Model;
 import com.avaje.ebean.PagedList;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import play.libs.Json;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * @author techno
@@ -20,24 +23,34 @@ public abstract class AbstractModel extends Model {
     @Id
     public Long id;
 
-
-    public String hello(){
-        return "Hello";
-    }
-
-    public PagedList<AbstractModel> getFields(Map<String, String[]> params){
-        String filter = params.get("search[value]")[0];
-        String order = params.get("order[0][dir]")[0];
-        String sortBy = params.get("order[0][column]")[0];
-        Integer pageSize = Integer.valueOf(params.get("length")[0]);
-        Integer page = Integer.valueOf(params.get("start")[0]) / pageSize;
-        PagedList<AbstractModel> pagedList = Ebean.find(AbstractModel.class).where().
-                raw("name LIKE '%" + filter + "%' " +
-                        "OR title LIKE '%" + filter + "%' " +
-                        "OR email LIKE '%" + filter + "%' ")
+    public static <T> PagedList<T> getPagedList(Class<T> modelClass, String filter, String order, String sortBy, Integer pageSize, Integer page) {
+        // TODO make better filtering, this one only filters string, with other than that problem may happen
+        String expr = Arrays.stream(modelClass.getFields())
+//                .filter(field -> !field.getName().startsWith("find") && !field.getName().startsWith("_"))
+                .map(Field::getName)
+                .map(field -> "OR CAST(" + field + " AS TEXT) LIKE '%" + filter + "%' ")
+                .collect(Collectors.joining(" "));
+        return Ebean.find(modelClass)
+                .where()
+                .raw("1=1 " + expr)
                 .orderBy(sortBy + " " + order + ", id " + order)
                 .findPagedList(page, pageSize);
+    }
 
-        return pagedList;
+    public ObjectNode getData() {
+        ObjectNode row = Json.newObject();
+        Arrays.stream(getClass().getFields())
+//                .filter(field -> !field.getName().startsWith("find") && !field.getName().startsWith("_"))
+                .forEach(field -> {
+                    String key = field.getName();
+                    String value = "";
+                    try {
+                        value = field.get(this).toString();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    row.put(key, value);
+                });
+        return row;
     }
 }
