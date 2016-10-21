@@ -1,18 +1,12 @@
 @(message: String)
 
-@main("Play!ing with DataTables") {
-
-
-
-  <h2>Play!ing with DataTables</h2>
-
-  <table id="contacts" class='display'>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Title</th>
-            <th>E-mail</th>
-        </tr>
-    </thead>
-</table>
-}
+    @main("Play!ing with DataTables") {
+        <div class="wrapper">
+            <div class="content">
+                <h2>Play 2.5.x!ing with DataTables</h2>
+                <table id="contacts" class="table table-condensed table-striped dataTable" width="100%">
+                    <thead class="text-primary"></thead>
+                </table>
+            </div>
+        </div>
+    }

@@ -5,23 +5,96 @@
 <html>
     <head>
         <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/demo_table_jui.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/ui-lightness/jquery-ui-1.8.21.custom.css")">
-        <script src="@routes.Assets.at("javascripts/jquery.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/jquery-ui.min.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/jquery.dataTables.min.js")" type="text/javascript"></script>
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        @*<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/demo_table_jui.css")">*@
+        @*<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/ui-lightness/jquery-ui-1.8.21.custom.css")">*@
+        @*<script src="@routes.Assets.at("javascripts/jquery.js")" type="text/javascript"></script>*@
+        @*<script src="@routes.Assets.at("javascripts/jquery-ui.min.js")" type="text/javascript"></script>*@
+        @*<script src="@routes.Assets.at("javascripts/jquery.dataTables.min.js")" type="text/javascript"></script>*@
+        <link rel="shortcut icon" href="@routes.Assets.versioned("images/favicon.png")" type="image/png" >
+        @*<!-- Bootstrap -->*@
+        <link rel="stylesheet" href="@routes.Assets.versioned("bootstrap-3.3.7-dist/css/bootstrap.min.css")">
+        @*<!-- Fonts and icons -->*@
+        <link rel="stylesheet" href="@routes.Assets.versioned("font-awesome-4.6.3/css/font-awesome.min.css")">
+        <link rel="stylesheet" href="@routes.Assets.versioned("DataTables-1.10.12/media/css/dataTables.bootstrap.min.css")">
+        <link rel="stylesheet" href="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/css/buttons.bootstrap.min.css")">
     </head>
     <body>
         @content
+    <script src="@routes.Assets.versioned("DataTables-1.10.12/media/js/jquery.js")"></script>
+    <script src="@routes.Assets.versioned("bootstrap-3.3.7-dist/js/bootstrap.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("DataTables-1.10.12/media/js/jquery.dataTables.min.js")"></script>
+    <script src="@routes.Assets.versioned("DataTables-1.10.12/media/js/dataTables.bootstrap.min.js")"></script>
+    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/dataTables.buttons.min.js")"></script>
+    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.bootstrap.min.js")"></script>
+    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.html5.min.js")"></script>
+    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.flash.min.js")"></script>
+    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.colVis.min.js")"></script>
+    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.print.min.js")"></script>
+    <script src="@routes.Assets.versioned("DataTables-1.10.12/plugins/sum().js")"></script>
+    <script src="@routes.Assets.versioned("javascripts/jszip.min.js")"></script>
+    <script src="@routes.Assets.versioned("pdfmake-0.1.20/pdfmake.min.js")"></script>
+    <script src="@routes.Assets.versioned("pdfmake-0.1.20/vfs_fonts.js")"></script>
+        @helper.javascriptRouter("jsRoutes")(
+            routes.javascript.HomeController.list
+        )
     <script type="text/javascript">
-          $(document).ready(function () {
-              $('#contacts').dataTable({
-                  "processing": true,
-                  "serverSide": true,
-                  "ajax": "@routes.HomeController.list()"
-              });
-          });
+        var $currentRow;
+        $(document).ready(function () {
+            var $table = $('#contacts').DataTable({
+                //"dom": "lftrip"
+                "order": [[1, 'asc']],
+                "processing": true,
+                "serverSide": true,
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "searchable": false,
+                        "orderable": false,
+                        'title': '#',
+                    },
+                    {
+                        "targets": [-1],
+                        "searchable": false,
+                        "orderable": false,
+                        'title': 'Actions',
+                    },
+                ],
+                "ajax": {
+                    "url" : jsRoutes.controllers.HomeController.list().url,
+                    'type': 'POST',
+                },
+                "columns": [
+                    {'data': null,},
+                    {'data': "name","title":"Name"},
+                    {'data': "title","title":"Title"},
+                    {'data': "email","title":"Email"},
+                    {'data': null, "render": function (data) {
+                        return "here wiil be action buttons";
+                    }},
+                ],
+                "buttons": ['copy', 'csv', 'excel'],
+                "rowCallback": function( row, data, iDisplayIndex ) {
+                    var info = this.api().page.info();
+                    var index = (info.page * info.length + (iDisplayIndex +1));
+                    $('td:eq(0)', row).html(index);
+                }
+            });
+
+            $('#table tbody').on('click', 'button', function () {
+                $currentRow = $table.row($(this).parents('tr'));
+                var rowData = $currentRow.data();
+                console.log(rowData)
+                var action = $(this).attr("action");
+                switch (action) {
+                    case "edit":
+                        console.log(action + ":" + rowData)
+                        break;
+                    case "delete":
+                        console.log(action + ":" + rowData)
+                        break;
+                }
+            });
+        });
         </script>
     </body>
 </html>

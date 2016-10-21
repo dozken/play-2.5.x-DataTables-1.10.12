@@ -11,8 +11,16 @@ create table contact (
   constraint pk_contact primary key (id)
 );
 
+create table simple_model (
+  id                            bigserial not null,
+  name                          varchar(255),
+  constraint pk_simple_model primary key (id)
+);
+
 
 # --- !Downs
 
 drop table if exists contact cascade;
+
+drop table if exists simple_model cascade;
 
