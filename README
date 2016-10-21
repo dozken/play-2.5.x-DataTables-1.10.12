@@ -1,4 +1,3 @@
-This is your new Play 2.0 application
-=====================================
-
-This file will be packaged with your application, when using `play dist`.
+1. play-2.5.x
+2. DataTables-1.10.12
+3. Abstract Models
