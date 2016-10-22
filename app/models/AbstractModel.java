@@ -26,7 +26,7 @@ public abstract class AbstractModel extends Model {
     public static <T> PagedList<T> getPagedList(Class<T> modelClass, String filter, String order, String sortBy, Integer pageSize, Integer page) {
         // TODO make better filtering, this one only filters string, with other than that problem may happen
         String expr = Arrays.stream(modelClass.getFields())
-//                .filter(field -> !field.getName().startsWith("find") && !field.getName().startsWith("_"))
+                .filter(field -> !field.getName().startsWith("find") && !field.getName().startsWith("_"))
                 .map(Field::getName)
                 .map(field -> "OR CAST(" + field + " AS TEXT) LIKE '%" + filter + "%' ")
                 .collect(Collectors.joining(" "));
@@ -40,7 +40,7 @@ public abstract class AbstractModel extends Model {
     public ObjectNode getData() {
         ObjectNode row = Json.newObject();
         Arrays.stream(getClass().getFields())
-//                .filter(field -> !field.getName().startsWith("find") && !field.getName().startsWith("_"))
+                .filter(field -> !field.getName().startsWith("find") && !field.getName().startsWith("_"))
                 .forEach(field -> {
                     String key = field.getName();
                     String value = "";
