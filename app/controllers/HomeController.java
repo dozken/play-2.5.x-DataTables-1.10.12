@@ -22,6 +22,7 @@ public class HomeController extends Controller {
     public Result list() {
 
 
+
         //DynamicForm dynamicForm = Form.form().bindFromRequest();
 
         /**
