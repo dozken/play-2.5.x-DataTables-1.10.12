@@ -8,11 +8,13 @@ import javax.persistence.Entity;
  *          created on 10/21/16
  */
 @Entity
-public class SimpleModel extends AbstractModel {
+public final class SimpleModel extends AbstractModel {
 
     public String name;
 
-    public void asd(){
-        long a = this.id;
+    public String firstname;
+
+    public String toString() {
+        return name;
     }
 }

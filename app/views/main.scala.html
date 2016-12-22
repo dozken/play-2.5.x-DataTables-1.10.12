@@ -20,81 +20,83 @@
     </head>
     <body>
         @content
-    <script src="@routes.Assets.versioned("DataTables-1.10.12/media/js/jquery.js")"></script>
-    <script src="@routes.Assets.versioned("bootstrap-3.3.7-dist/js/bootstrap.min.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.versioned("DataTables-1.10.12/media/js/jquery.dataTables.min.js")"></script>
-    <script src="@routes.Assets.versioned("DataTables-1.10.12/media/js/dataTables.bootstrap.min.js")"></script>
-    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/dataTables.buttons.min.js")"></script>
-    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.bootstrap.min.js")"></script>
-    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.html5.min.js")"></script>
-    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.flash.min.js")"></script>
-    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.colVis.min.js")"></script>
-    <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.print.min.js")"></script>
-    <script src="@routes.Assets.versioned("DataTables-1.10.12/plugins/sum().js")"></script>
-    <script src="@routes.Assets.versioned("javascripts/jszip.min.js")"></script>
-    <script src="@routes.Assets.versioned("pdfmake-0.1.20/pdfmake.min.js")"></script>
-    <script src="@routes.Assets.versioned("pdfmake-0.1.20/vfs_fonts.js")"></script>
+        <script src="@routes.Assets.versioned("DataTables-1.10.12/media/js/jquery.js")"></script>
+        <script src="@routes.Assets.versioned("bootstrap-3.3.7-dist/js/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("DataTables-1.10.12/media/js/jquery.dataTables.min.js")"></script>
+        <script src="@routes.Assets.versioned("DataTables-1.10.12/media/js/dataTables.bootstrap.min.js")"></script>
+        <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/dataTables.buttons.min.js")"></script>
+        <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.bootstrap.min.js")"></script>
+        <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.html5.min.js")"></script>
+        <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.flash.min.js")"></script>
+        <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.colVis.min.js")"></script>
+        <script src="@routes.Assets.versioned("DataTables-1.10.12/extensions/Buttons/js/buttons.print.min.js")"></script>
+        <script src="@routes.Assets.versioned("DataTables-1.10.12/plugins/sum().js")"></script>
+        <script src="@routes.Assets.versioned("javascripts/jszip.min.js")"></script>
+        <script src="@routes.Assets.versioned("pdfmake-0.1.20/pdfmake.min.js")"></script>
+        <script src="@routes.Assets.versioned("pdfmake-0.1.20/vfs_fonts.js")"></script>
         @helper.javascriptRouter("jsRoutes")(
             routes.javascript.HomeController.list
         )
-    <script type="text/javascript">
-        var $currentRow;
-        $(document).ready(function () {
-            var $table = $('#contacts').DataTable({
-                //"dom": "lftrip"
-                "order": [[1, 'asc']],
-                "processing": true,
-                "serverSide": true,
-                "columnDefs": [
-                    {
-                        "targets": [0],
-                        "searchable": false,
-                        "orderable": false,
-                        'title': '#',
-                    },
-                    {
-                        "targets": [-1],
-                        "searchable": false,
-                        "orderable": false,
-                        'title': 'Actions',
-                    },
-                ],
-                "ajax": {
-                    "url" : jsRoutes.controllers.HomeController.list().url,
-                    'type': 'POST',
-                },
-                "columns": [
-                    {'data': null,},
-                    {'data': "name","title":"Name"},
-                    {'data': "title","title":"Title"},
-                    {'data': "email","title":"Email"},
-                    {'data': null, "render": function (data) {
-                        return "here wiil be action buttons";
-                    }},
-                ],
-                "buttons": ['copy', 'csv', 'excel'],
-                "rowCallback": function( row, data, iDisplayIndex ) {
-                    var info = this.api().page.info();
-                    var index = (info.page * info.length + (iDisplayIndex +1));
-                    $('td:eq(0)', row).html(index);
-                }
-            });
+        <script type="text/javascript">
+                var $currentRow;
+                $(document).ready(function () {
+                    var $table = $('#contacts').DataTable({
+                        //"dom": "lftrip"
+                        "order": [[1, 'asc']],
+                        "processing": true,
+                        "serverSide": true,
+                        "columnDefs": [
+                            {
+                                "targets": [0],
+                                "searchable": false,
+                                "orderable": false,
+                                'title': '#',
+                            },
+                            {
+                                "targets": [-1],
+                                "searchable": false,
+                                "orderable": false,
+                                'title': 'Actions',
+                            },
+                        ],
+                        "ajax": {
+                            "url": jsRoutes.controllers.HomeController.list().url,
+                            'type': 'POST',
+                        },
+                        "columns": [
+                            {'data': null,},
+                            {'data': "name", "title": "Name"},
+                            {'data': "title", "title": "Title"},
+                            {'data': "email", "title": "Email"},
+                            {
+                                'data': null, "render": function (data) {
+                                return "here wiil be action buttons";
+                            }
+                            },
+                        ],
+                        "buttons": ['copy', 'csv', 'excel'],
+                        "rowCallback": function (row, data, iDisplayIndex) {
+                            var info = this.api().page.info();
+                            var index = (info.page * info.length + (iDisplayIndex + 1));
+                            $('td:eq(0)', row).html(index);
+                        }
+                    });
 
-            $('#table tbody').on('click', 'button', function () {
-                $currentRow = $table.row($(this).parents('tr'));
-                var rowData = $currentRow.data();
-                console.log(rowData)
-                var action = $(this).attr("action");
-                switch (action) {
-                    case "edit":
-                        console.log(action + ":" + rowData)
-                        break;
-                    case "delete":
-                        console.log(action + ":" + rowData)
-                        break;
-                }
-            });
-        });
+                    $('#table tbody').on('click', 'button', function () {
+                        $currentRow = $table.row($(this).parents('tr'));
+                        var rowData = $currentRow.data();
+                        console.log(rowData)
+                        var action = $(this).attr("action");
+                        switch (action) {
+                            case "edit":
+                                console.log(action + ":" + rowData)
+                                break;
+                            case "delete":
+                                console.log(action + ":" + rowData)
+                                break;
+                        }
+                    });
+                });
         </script>
     </body>
 </html>

@@ -14,6 +14,7 @@ create table contact (
 create table simple_model (
   id                            bigserial not null,
   name                          varchar(255),
+  firstname                     varchar(255),
   constraint pk_simple_model primary key (id)
 );
 
